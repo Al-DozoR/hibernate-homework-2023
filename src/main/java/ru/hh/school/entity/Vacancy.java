@@ -1,5 +1,7 @@
 package ru.hh.school.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,26 +15,42 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 //TODO: оформите entity
+@Entity
 public class Vacancy {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "vacancy_id", nullable = false)
   private Integer id;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "employer_id", nullable = false)
   private Employer employer;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_id")
   private Area area;
 
+  @Column(nullable = false)
   private String title;
 
+  @Column
   private String description;
 
+  @Column(name = "compensation_from")
   private Integer compensationFrom;
 
+  @Column(name = "compensation_to")
   private Integer  compensationTo;
 
+  @Column(name = "compensation_gross")
   private Boolean compensationGross;
 
+  @CreationTimestamp
+  @Column(name = "creation_time", nullable = false)
   private LocalDateTime creationTime;
 
+  @CreationTimestamp
+  @Column(name = "archiving_time")
   private LocalDateTime archivingTime;
 
   public Vacancy() {
@@ -100,7 +118,7 @@ public class Vacancy {
 
   @Override
   public int hashCode() {
-    return 17;
+    return Objects.hash(id, title);
   }
 
 }
